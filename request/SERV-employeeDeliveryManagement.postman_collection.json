@@ -1,0 +1,838 @@
+{
+	"info": {
+		"_postman_id": "118ca2c7-48c3-4f3f-8354-e3f62c913697",
+		"name": "SERV-employeeDeliveryManagement",
+		"description": "Administración y gestion de las entregas de los empleados de rinku",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "employee-delivery-save",
+			"item": [
+				{
+					"name": "save delivery success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const moment = require('moment');",
+									"pm.collectionVariables.set(\"todayDate\", moment().format(\"YYYY/MM/DD HH:mm\"));",
+									"console.log(\"collection date \" + pm.variables.get(\"todayDate\"));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "uuid",
+								"value": "{{$randomUUID}}",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{$randomWord}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"employeeNumber\": \"momef902\",\n    \"registrationDate\": \"{{todayDate}}\",\n    \"deliveries\": {{$randomInt}},\n    \"assignedRol\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host-employee-delivery-management}}{{employee-delivery-domain}}",
+							"host": [
+								"{{host-employee-delivery-management}}{{employee-delivery-domain}}"
+							]
+						},
+						"description": "Guarda uana entrega con éxito"
+					},
+					"response": []
+				},
+				{
+					"name": "save withoud registrationDate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Validate Response\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Header required is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');",
+									"});",
+									"",
+									"var data = JSON.parse(responseBody);",
+									"",
+									"tests[\"Body has type\"] = responseBody.has(\"type\");",
+									"tests[\"Body has code\"] = responseBody.has(\"code\");",
+									"tests[\"Body has details\"] = responseBody.has(\"details\");",
+									"tests[\"Body has location\"] = responseBody.has(\"location\");",
+									"tests[\"Body has uuid\"] = responseBody.has(\"uuid\");",
+									"tests[\"Body has timestamp\"] = responseBody.has(\"timestamp\");",
+									"",
+									"tests[\"code is equal 400\"] = data.code == '400';",
+									"tests[\"type is equal INVALID\"] = data.type == 'INVALID';",
+									"tests[\"details is equal to\"] = data.details == '{no debe estar vacío=[registrationDate]}';",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "uuid",
+								"value": "{{$randomUUID}}",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"employeeNumber\": \"momef908\",\n    \"registrationDate\": \"\",\n    \"deliveries\": {{$randomInt}},\n    \"assignedRol\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host-employee-delivery-management}}{{employee-delivery-domain}}",
+							"host": [
+								"{{host-employee-delivery-management}}{{employee-delivery-domain}}"
+							]
+						},
+						"description": "Ocurre un badRequest al guardar un empleado falta campo \"firstname\""
+					},
+					"response": []
+				},
+				{
+					"name": "save withoud deliveries",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Validate Response\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Header required is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');",
+									"});",
+									"",
+									"var data = JSON.parse(responseBody);",
+									"",
+									"tests[\"Body has type\"] = responseBody.has(\"type\");",
+									"tests[\"Body has code\"] = responseBody.has(\"code\");",
+									"tests[\"Body has details\"] = responseBody.has(\"details\");",
+									"tests[\"Body has location\"] = responseBody.has(\"location\");",
+									"tests[\"Body has uuid\"] = responseBody.has(\"uuid\");",
+									"tests[\"Body has timestamp\"] = responseBody.has(\"timestamp\");",
+									"",
+									"tests[\"code is equal 400\"] = data.code == '400';",
+									"tests[\"type is equal INVALID\"] = data.type == 'INVALID';",
+									"tests[\"details is equal to\"] = data.details == '{debe ser mayor que o igual a 1=[deliveries]}';",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "uuid",
+								"value": "{{$randomUUID}}",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"employeeNumber\": \"momef908\",\n    \"registrationDate\": \"2021/05/31 18:35\",\n    \"deliveries\": 0,\n    \"assignedRol\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host-employee-delivery-management}}{{employee-delivery-domain}}",
+							"host": [
+								"{{host-employee-delivery-management}}{{employee-delivery-domain}}"
+							]
+						},
+						"description": "Ocurre un badRequest al guardar un empleado falta campo \"firstname\""
+					},
+					"response": []
+				},
+				{
+					"name": "not valid assignedRol",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Validate Response\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Header required is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');",
+									"});",
+									"",
+									"var data = JSON.parse(responseBody);",
+									"",
+									"tests[\"Body has type\"] = responseBody.has(\"type\");",
+									"tests[\"Body has code\"] = responseBody.has(\"code\");",
+									"tests[\"Body has details\"] = responseBody.has(\"details\");",
+									"tests[\"Body has location\"] = responseBody.has(\"location\");",
+									"tests[\"Body has uuid\"] = responseBody.has(\"uuid\");",
+									"tests[\"Body has timestamp\"] = responseBody.has(\"timestamp\");",
+									"",
+									"tests[\"code is equal 400\"] = data.code == '400';",
+									"tests[\"type is equal INVALID\"] = data.type == 'INVALID';",
+									"tests[\"details is equal to\"] = data.details == '{debe ser mayor que o igual a 1=[assignedRol]}';"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "uuid",
+								"value": "{{$randomUUID}}",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"employeeNumber\": \"momef908\",\n    \"registrationDate\": \"2021/05/31 18:35\",\n    \"deliveries\": {{$randomInt}},\n    \"assignedRol\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host-employee-delivery-management}}{{employee-delivery-domain}}",
+							"host": [
+								"{{host-employee-delivery-management}}{{employee-delivery-domain}}"
+							]
+						},
+						"description": "Ocurre un badRequest al guardar un empleado falta campo \"enrolled\""
+					},
+					"response": []
+				},
+				{
+					"name": "save delivery exist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});",
+									"",
+									"pm.test(\"Validate Response\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Header required is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');",
+									"});",
+									"",
+									"var data = JSON.parse(responseBody);",
+									"",
+									"tests[\"Body has type\"] = responseBody.has(\"type\");",
+									"tests[\"Body has code\"] = responseBody.has(\"code\");",
+									"tests[\"Body has details\"] = responseBody.has(\"details\");",
+									"tests[\"Body has location\"] = responseBody.has(\"location\");",
+									"tests[\"Body has uuid\"] = responseBody.has(\"uuid\");",
+									"tests[\"Body has timestamp\"] = responseBody.has(\"timestamp\");",
+									"",
+									"tests[\"code is equal 403\"] = data.code == '403';",
+									"tests[\"type is equal ERROR\"] = data.type == 'ERROR';",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const moment = require('moment');",
+									"pm.collectionVariables.set(\"todayDate\", moment().format(\"YYYY/MM/DD HH:mm\"));",
+									"console.log(\"collection date \" + pm.variables.get(\"todayDate\"));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "uuid",
+								"value": "{{$randomUUID}}",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{$randomBankAccount}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"employeeNumber\": \"momef902\",\n    \"registrationDate\": \"{{todayDate}}\",\n    \"deliveries\": {{$randomInt}},\n    \"assignedRol\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host-employee-delivery-management}}{{employee-delivery-domain}}",
+							"host": [
+								"{{host-employee-delivery-management}}{{employee-delivery-domain}}"
+							]
+						},
+						"description": "Intenta guardar un empleado existente"
+					},
+					"response": []
+				},
+				{
+					"name": "save withoud employeeNumber",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Validate Response\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Header required is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');",
+									"});",
+									"",
+									"var data = JSON.parse(responseBody);",
+									"",
+									"tests[\"Body has type\"] = responseBody.has(\"type\");",
+									"tests[\"Body has code\"] = responseBody.has(\"code\");",
+									"tests[\"Body has details\"] = responseBody.has(\"details\");",
+									"tests[\"Body has location\"] = responseBody.has(\"location\");",
+									"tests[\"Body has uuid\"] = responseBody.has(\"uuid\");",
+									"tests[\"Body has timestamp\"] = responseBody.has(\"timestamp\");",
+									"",
+									"tests[\"code is equal 400\"] = data.code == '400';",
+									"tests[\"type is equal INVALID\"] = data.type == 'INVALID';",
+									"tests[\"details is equal to\"] = data.details == '{no debe estar vacío=[employeeNumber]}';",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "uuid",
+								"value": "{{$randomUUID}}",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"employeeNumber\": \"\",\n    \"registrationDate\": \"2021-05-31 18:35:00\",\n    \"deliveries\": {{$randomInt}},\n    \"assignedRol\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host-employee-delivery-management}}{{employee-delivery-domain}}",
+							"host": [
+								"{{host-employee-delivery-management}}{{employee-delivery-domain}}"
+							]
+						},
+						"description": "Ocurre un badRequest al guardar un empleado falta campo \"firstname\""
+					},
+					"response": []
+				}
+			],
+			"description": "Guarda una entrega de un empleado"
+		},
+		{
+			"name": "employee-delivery-retrieve",
+			"item": [
+				{
+					"name": "pagination success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Validate Response\", function () {",
+									"    pm.response.to.be.ok;",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Header required is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');",
+									"});",
+									"",
+									"pm.test('Delivery schema is valid', function() {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.currentPage).to.be.a(\"number\");",
+									"    pm.expect(jsonData.totalPages).to.be.a(\"number\");",
+									"    pm.expect(jsonData.lastPage).to.be.a(\"boolean\");",
+									"    pm.expect(jsonData.firstPage).to.be.a(\"boolean\");",
+									"    pm.expect(jsonData.deliveries).to.be.an(\"array\");",
+									"    pm.expect(jsonData.deliveries).not.be.empty;",
+									"",
+									"    const delivery = jsonData.deliveries[0]",
+									"    pm.expect(delivery.employeeNumber).to.be.a(\"string\");",
+									"    pm.expect(delivery.registrationDate).to.be.a(\"string\");",
+									"    pm.expect(delivery.deliveries).to.be.a(\"number\");",
+									"    pm.expect(delivery.assignedRol).to.be.a(\"number\");",
+									"});",
+									"",
+									"pm.test('Delivery response not empty dataº', function() {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.currentPage).to.eql(1);;",
+									"    pm.expect(jsonData.totalPages).not.eql(0);",
+									"    pm.expect(jsonData.firstPage).to.be.true;",
+									"    pm.expect(jsonData.deliveries).not.be.empty;",
+									"",
+									"    const delivery = jsonData.deliveries[0]",
+									"    pm.expect(delivery.employeeNumber).not.be.empty;",
+									"    pm.expect(delivery.registrationDate).not.be.empty;",
+									"    pm.expect(delivery.deliveries).not.eql(0);",
+									"    pm.expect(delivery.assignedRol).not.eql(0);",
+									"});",
+									"",
+									"tests[\"Body has employeeNumber\"] = responseBody.has(\"employeeNumber\");",
+									"tests[\"Body has registrationDate\"] = responseBody.has(\"registrationDate\");",
+									"tests[\"Body has deliveries\"] = responseBody.has(\"deliveries\");",
+									"tests[\"Body has assignedRol\"] = responseBody.has(\"assignedRol\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "uuid",
+								"value": "{{$randomUUID}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host-employee-delivery-management}}{{employee-delivery-pagination}}1",
+							"host": [
+								"{{host-employee-delivery-management}}{{employee-delivery-pagination}}1"
+							]
+						},
+						"description": "Consulta la pagina 1 de empleados con exito"
+					},
+					"response": []
+				},
+				{
+					"name": "no data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Validate Response\", function () {",
+									"    pm.response.to.be.ok;",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Header required is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');",
+									"});",
+									"",
+									"pm.test('Delivery schema is valid', function() {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.currentPage).to.be.a(\"number\");",
+									"    pm.expect(jsonData.totalPages).to.be.a(\"number\");",
+									"    pm.expect(jsonData.lastPage).to.be.a(\"boolean\");",
+									"    pm.expect(jsonData.firstPage).to.be.a(\"boolean\");",
+									"    pm.expect(jsonData.deliveries).to.be.an(\"array\");",
+									"    pm.expect(jsonData.deliveries).to.be.empty;",
+									"});",
+									"",
+									"",
+									"pm.test('Deliveries response not empty dataº', function() {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData.pageNumber).not.eql(0);;",
+									"    pm.expect(jsonData.totalPages).not.eql(0);",
+									"    pm.expect(jsonData.lastPage).to.be.true;",
+									"    pm.expect(jsonData.firstPage).to.be.false;",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "uuid",
+								"value": "{{$randomUUID}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host-employee-delivery-management}}{{employee-delivery-pagination}}100",
+							"host": [
+								"{{host-employee-delivery-management}}{{employee-delivery-pagination}}100"
+							]
+						},
+						"description": "no obtiene datos en la consulta"
+					},
+					"response": []
+				},
+				{
+					"name": "retrieve success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Validate Response\", function () {",
+									"    pm.response.to.be.ok;",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Header required is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');",
+									"});",
+									"",
+									"pm.test('Delivery schema is valid', function() {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an(\"array\");",
+									"",
+									"    const delivery = jsonData[0]",
+									"    pm.expect(delivery.employeeNumber).to.be.a(\"string\");",
+									"    pm.expect(delivery.registrationDate).to.be.a(\"string\");",
+									"    pm.expect(delivery.deliveries).to.be.a(\"number\");",
+									"    pm.expect(delivery.assignedRol).to.be.a(\"number\");",
+									"});",
+									"",
+									"pm.test('Delivery response not empty dataº', function() {",
+									"    const jsonData = pm.response.json();",
+									"    const delivery = jsonData[0];",
+									"    console.log(delivery);",
+									"    pm.expect(delivery).not.be.empty;",
+									"    pm.expect(delivery.employeeNumber).not.be.empty;",
+									"    pm.expect(delivery.registrationDate).not.be.empty;",
+									"    pm.expect(delivery.deliveries).not.eql(0);",
+									"    pm.expect(delivery.assignedRol).not.eql(0);",
+									"    pm.expect(delivery.assignedRolDescription).not.be.empty;",
+									"});",
+									"",
+									"tests[\"Body has employeeNumber\"] = responseBody.has(\"employeeNumber\");",
+									"tests[\"Body has registrationDate\"] = responseBody.has(\"registrationDate\");",
+									"tests[\"Body has deliveries\"] = responseBody.has(\"deliveries\");",
+									"tests[\"Body has assignedRol\"] = responseBody.has(\"assignedRol\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "uuid",
+								"value": "{{$randomUUID}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{$randomWord}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host-employee-delivery-management}}{{employee-delivery-domain}}",
+							"host": [
+								"{{host-employee-delivery-management}}{{employee-delivery-domain}}"
+							]
+						},
+						"description": "Consulta los empleados con exito"
+					},
+					"response": []
+				}
+			],
+			"description": "Consulta las entregas de los empleados"
+		},
+		{
+			"name": "employee-delivery-update",
+			"item": [
+				{
+					"name": "update success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "uuid",
+								"value": "{{$randomUUID}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{$randomBankAccount}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"employeeNumber\": \"momef902\",\n    \"registrationDate\": \"2021/05/31 18:35\",\n    \"deliveries\": {{$randomInt}},\n    \"assignedRol\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host-employee-delivery-management}}{{employee-delivery-domain}}/1",
+							"host": [
+								"{{host-employee-delivery-management}}{{employee-delivery-domain}}"
+							],
+							"path": [
+								"1"
+							]
+						},
+						"description": "Actualiza un empleado con exito"
+					},
+					"response": []
+				},
+				{
+					"name": "not exists",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"Validate Response\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Header required is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');",
+									"});",
+									"",
+									"tests[\"Body has type\"] = responseBody.has(\"type\");",
+									"tests[\"Body has code\"] = responseBody.has(\"code\");",
+									"tests[\"Body has details\"] = responseBody.has(\"details\");",
+									"tests[\"Body has location\"] = responseBody.has(\"location\");",
+									"tests[\"Body has uuid\"] = responseBody.has(\"uuid\");",
+									"tests[\"Body has timestamp\"] = responseBody.has(\"timestamp\");",
+									"",
+									"var data = JSON.parse(responseBody);",
+									"",
+									"tests[\"code is equal 404\"] = data.code == '404';",
+									"tests[\"type is equal ERROR\"] = data.type == 'ERROR';",
+									"tests[\"details is equal to\"] = data.details == 'Dato no Encontrado.';",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "uuid",
+								"value": "{{$randomUUID}}",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"employeeNumber\": \"Everette76\",\n    \"registrationDate\": \"2021/06/04 20:30\",\n    \"deliveries\": {{$randomInt}},\n    \"assignedRol\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host-employee-delivery-management}}{{employee-delivery-domain}}/0",
+							"host": [
+								"{{host-employee-delivery-management}}{{employee-delivery-domain}}"
+							],
+							"path": [
+								"0"
+							]
+						},
+						"description": "Intenta actualizar un empleado que no existe"
+					},
+					"response": []
+				}
+			],
+			"description": "API para actualizar las entregas del empleado"
+		}
+	],
+	"variable": [
+		{
+			"key": "todayDate",
+			"value": ""
+		}
+	]
+}
