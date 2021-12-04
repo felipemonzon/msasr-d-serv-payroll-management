@@ -10,7 +10,7 @@ Para más detalle mira el archivo [CHANGELOG](CHANGELOG)
 
 # Code Analize
 
-
+[![SonarCloud](https://github.com/felipemonzon/msasr-d-serv-payroll-management/actions/workflows/sonarCloud.yml/badge.svg?branch=main)](https://github.com/felipemonzon/msasr-d-serv-payroll-management/actions/workflows/sonarCloud.yml)
 
 ### Pre-requisitos 📋
 
